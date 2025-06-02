@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario: Libros de la Biblia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #e0e7ff; /* Un fondo suave diferente, índigo claro */
+            color: #374151; /* Gris oscuro para el texto principal */
+        }
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .quiz-container:hover {
+            transform: translateY(-5px);
+        }
+        .question-text {
+            color: #1e3a8a; /* Azul oscuro para las preguntas */
+        }
+        .option-button {
+            background-color: #f0f4f8;
+            border: 2px solid #d1d5db; /* Borde gris claro */
+            color: #374151;
+            transition: all 0.2s ease-in-out;
+            border-radius: 8px;
+        }
+        .option-button:hover {
+            background-color: #3b82f6; /* Azul al pasar el mouse */
+            color: white;
+            border-color: #2563eb;
+        }
+        .option-button.correct {
+            background-color: #10b981 !important; /* Verde para correcto */
+            color: white !important;
+            border-color: #059669 !important;
+        }
+        .option-button.incorrect {
+            background-color: #ef4444 !important; /* Rojo para incorrecto */
+            color: white !important;
+            border-color: #dc2626 !important;
+        }
+        .option-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+        .feedback-text {
+            min-height: 24px; /* Para evitar saltos de diseño */
+        }
+        .progress-bar-bg {
+            background-color: #e5e7eb; /* Fondo de la barra de progreso */
+            border-radius: 9999px;
+        }
+        .progress-bar-fill {
+            background-color: #3b82f6; /* Relleno de la barra de progreso */
+            border-radius: 9999px;
+            transition: width 0.3s ease-in-out;
+        }
+        .start-button, .next-button, .restart-button {
+            background-color: #4f46e5; /* Índigo para botones principales */
+            color: white;
+            transition: background-color 0.2s ease;
+            border-radius: 8px;
+        }
+        .start-button:hover, .next-button:hover, .restart-button:hover {
+            background-color: #4338ca; /* Índigo más oscuro */
+        }
+
+        /* Colores de categoría para referencia visual (opcional en el quiz) */
+        .pentateuco-bg { background-color: #3b82f6; color: white; } /* Azul */
+        .historicos-ot-bg { background-color: #10b981; color: white; } /* Verde */
+        .sapienciales-bg { background-color: #f59e0b; color: white; } /* Ámbar */
+        .profetas-mayores-bg { background-color: #ef4444; color: white; } /* Rojo */
+        .profetas-menores-bg { background-color: #8b5cf6; color: white; } /* Violeta */
+        .evangelios-bg { background-color: #fbbf24; color: white; } /* Amarillo Sol */
+        .historicos-nt-bg { background-color: #22d3ee; color: white; } /* Cian */
+        .cartas-paulinas-bg { background-color: #ec4899; color: white; } /* Rosa */
+        .cartas-generales-bg { background-color: #6366f1; color: white; } /* Índigo */
+        .profetico-nt-bg { background-color: #f97316; color: white; } /* Naranja */
+    </style>
+</head>
+<body class="p-4 md:p-8 flex flex-col items-center justify-center min-h-screen">
+
+    <div id="quiz-app" class="quiz-container w-full max-w-2xl p-6 md:p-8">
+        
+        <div id="start-screen" class="text-center">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-4">Cuestionario de los Libros de la Biblia</h1>
+            <p class="text-gray-700 mb-6">Pon a prueba tus conocimientos sobre los libros del Antiguo y Nuevo Testamento. ¡Buena suerte!</p>
+            <img src="https://placehold.co/300x200/e0e7ff/4f46e5?text=La+Biblia" alt="Ilustración decorativa de la Biblia" class="mx-auto mb-6 rounded-lg shadow-md" onerror="this.src='https://placehold.co/300x200/cccccc/333333?text=Imagen+no+disponible'">
+            <button id="start-button" class="start-button w-full sm:w-auto px-8 py-3 text-lg font-semibold">Comenzar Cuestionario</button>
+        </div>
+
+        <div id="quiz-screen" class="hidden">
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-sm text-gray-600">Pregunta <span id="current-question-number"></span> de <span id="total-questions"></span></p>
+                    <p class="text-sm font-semibold text-indigo-600">Puntuación: <span id="score">0</span></p>
+                </div>
+                <div class="progress-bar-bg w-full h-3">
+                    <div id="progress-bar" class="progress-bar-fill h-full" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <h2 id="question-text" class="question-text text-xl md:text-2xl font-semibold mb-6 min-h-[60px]">Cargando pregunta...</h2>
+            
+            <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                </div>
+
+            <div id="feedback-text" class="feedback-text text-center font-semibold mb-6"></div>
+
+            <button id="next-button" class="next-button w-full px-6 py-3 font-semibold hidden">Siguiente Pregunta</button>
+        </div>
+
+        <div id="end-screen" class="hidden text-center">
+            <h1 class="text-3xl font-bold text-indigo-700 mb-4">¡Cuestionario Completado!</h1>
+            <img src="https://placehold.co/200x150/e0e7ff/4f46e5?text=¡Felicidades!" alt="Ilustración de felicitaciones" class="mx-auto mb-6 rounded-lg shadow-md" onerror="this.src='https://placehold.co/200x150/cccccc/333333?text=Imagen+no+disponible'">
+            <p class="text-xl text-gray-700 mb-2">Tu puntuación final es:</p>
+            <p id="final-score" class="text-4xl font-bold text-indigo-600 mb-6"></p>
+            <p id="final-message" class="text-gray-600 mb-8"></p>
+            <button id="restart-button" class="restart-button w-full sm:w-auto px-8 py-3 text-lg font-semibold">Jugar de Nuevo</button>
+        </div>
+
+    </div>
+
+    <footer class="text-center mt-8 py-4">
+        <p class="text-sm text-gray-500">&copy; <span id="year"></span> Cuestionario Bíblico Interactivo.</p>
+    </footer>
+
+    <script>
+        const booksData = [
+            // Antiguo Testamento
+            // Pentateuco (La Ley)
+            { name: "Génesis", category: "Pentateuco" }, { name: "Éxodo", category: "Pentateuco" },
+            { name: "Levítico", category: "Pentateuco" }, { name: "Números", category: "Pentateuco" },
+            { name: "Deuteronomio", category: "Pentateuco" },
+            // Libros Históricos (AT)
+            { name: "Josué", category: "Históricos (AT)" }, { name: "Jueces", category: "Históricos (AT)" },
+            { name: "Rut", category: "Históricos (AT)" }, { name: "1 Samuel", category: "Históricos (AT)" },
+            { name: "2 Samuel", category: "Históricos (AT)" }, { name: "1 Reyes", category: "Históricos (AT)" },
+            { name: "2 Reyes", category: "Históricos (AT)" }, { name: "1 Crónicas", category: "Históricos (AT)" },
+            { name: "2 Crónicas", category: "Históricos (AT)" }, { name: "Esdras", category: "Históricos (AT)" },
+            { name: "Nehemías", category: "Históricos (AT)" }, { name: "Ester", category: "Históricos (AT)" },
+            // Libros Sapienciales y Poéticos
+            { name: "Job", category: "Sapienciales y Poéticos" }, { name: "Salmos", category: "Sapienciales y Poéticos" },
+            { name: "Proverbios", category: "Sapienciales y Poéticos" }, { name: "Eclesiastés", category: "Sapienciales y Poéticos" },
+            { name: "Cantar de los Cantares", category: "Sapienciales y Poéticos" },
+            // Profetas Mayores
+            { name: "Isaías", category: "Profetas Mayores" }, { name: "Jeremías", category: "Profetas Mayores" },
+            { name: "Lamentaciones", category: "Profetas Mayores" }, { name: "Ezequiel", category: "Profetas Mayores" },
+            { name: "Daniel", category: "Profetas Mayores" },
+            // Profetas Menores
+            { name: "Oseas", category: "Profetas Menores" }, { name: "Joel", category: "Profetas Menores" },
+            { name: "Amós", category: "Profetas Menores" }, { name: "Abdías", category: "Profetas Menores" },
+            { name: "Jonás", category: "Profetas Menores" }, { name: "Miqueas", category: "Profetas Menores" },
+            { name: "Nahúm", category: "Profetas Menores" }, { name: "Habacuc", category: "Profetas Menores" },
+            { name: "Sofonías", category: "Profetas Menores" }, { name: "Hageo", category: "Profetas Menores" },
+            { name: "Zacarías", category: "Profetas Menores" }, { name: "Malaquías", category: "Profetas Menores" },
+            // Nuevo Testamento
+            // Evangelios
+            { name: "Mateo", category: "Evangelios" }, { name: "Marcos", category: "Evangelios" },
+            { name: "Lucas", category: "Evangelios" }, { name: "Juan", category: "Evangelios" },
+            // Histórico (NT)
+            { name: "Hechos de los Apóstoles", category: "Histórico (NT)" },
+            // Cartas Paulinas
+            { name: "Romanos", category: "Cartas Paulinas" }, { name: "1 Corintios", category: "Cartas Paulinas" },
+            { name: "2 Corintios", category: "Cartas Paulinas" }, { name: "Gálatas", category: "Cartas Paulinas" },
+            { name: "Efesios", category: "Cartas Paulinas" }, { name: "Filipenses", category: "Cartas Paulinas" },
+            { name: "Colosenses", category: "Cartas Paulinas" }, { name: "1 Tesalonicenses", category: "Cartas Paulinas" },
+            { name: "2 Tesalonicenses", category: "Cartas Paulinas" }, { name: "1 Timoteo", category: "Cartas Paulinas" },
+            { name: "2 Timoteo", category: "Cartas Paulinas" }, { name: "Tito", category: "Cartas Paulinas" },
+            { name: "Filemón", category: "Cartas Paulinas" },
+            // Cartas Generales (o Católicas)
+            { name: "Hebreos", category: "Cartas Generales" }, { name: "Santiago", category: "Cartas Generales" },
+            { name: "1 Pedro", category: "Cartas Generales" }, { name: "2 Pedro", category: "Cartas Generales" },
+            { name: "1 Juan", category: "Cartas Generales" }, { name: "2 Juan", category: "Cartas Generales" },
+            { name: "3 Juan", category: "Cartas Generales" }, { name: "Judas", category: "Cartas Generales" },
+            // Profético (NT)
+            { name: "Apocalipsis", category: "Profético (NT)" }
+        ];
+
+        const categories = [
+            // Categorías del Antiguo Testamento
+            "Pentateuco", "Históricos (AT)", "Sapienciales y Poéticos", 
+            "Profetas Mayores", "Profetas Menores",
+            // Categorías del Nuevo Testamento
+            "Evangelios", "Histórico (NT)", "Cartas Paulinas",
+            "Cartas Generales", "Profético (NT)"
+        ];
+
+        const TOTAL_QUESTIONS = 15; // Aumentamos un poco el número de preguntas
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questions = [];
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const endScreen = document.getElementById('end-screen');
+        
+        const startButton = document.getElementById('start-button');
+        const nextButton = document.getElementById('next-button');
+        const restartButton = document.getElementById('restart-button');
+
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const feedbackTextEl = document.getElementById('feedback-text');
+        const scoreEl = document.getElementById('score');
+        const currentQuestionNumberEl = document.getElementById('current-question-number');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const progressBarEl = document.getElementById('progress-bar');
+        const finalScoreEl = document.getElementById('final-score');
+        const finalMessageEl = document.getElementById('final-message');
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        startButton.addEventListener('click', startQuiz);
+        nextButton.addEventListener('click', loadNextQuestion);
+        restartButton.addEventListener('click', startQuiz);
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function generateQuestions() {
+            questions = [];
+            const availableBooks = [...booksData];
+            shuffleArray(availableBooks);
+
+            for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+                const questionType = Math.floor(Math.random() * 3); // 0, 1, or 2
+                let questionData;
+
+                if (questionType === 0) { // ¿A qué categoría pertenece X?
+                    const book = availableBooks[i % availableBooks.length];
+                    const correctAnswer = book.category;
+                    // Asegurarse de que las opciones incorrectas sean realmente diferentes
+                    let wrongAnswersPool = categories.filter(cat => cat !== correctAnswer);
+                    shuffleArray(wrongAnswersPool);
+                    const options = shuffleArray([correctAnswer, ...wrongAnswersPool.slice(0, 3)]);
+                    
+                    // Si por alguna razón no hay suficientes opciones (poco probable con tantas categorías)
+                    while(options.length < 2 && wrongAnswersPool.length > 0) {
+                        options.push(wrongAnswersPool.pop()); // Añadir más hasta tener al menos 2
+                    }
+                     while(options.length < 4 && categories.length > options.length) { // Rellenar si es necesario y posible
+                        let potentialOption = categories[Math.floor(Math.random() * categories.length)];
+                        if (!options.includes(potentialOption)) {
+                            options.push(potentialOption);
+                        }
+                    }
+
+                    questionData = {
+                        text: `¿A qué categoría pertenece el libro de <strong>${book.name}</strong>?`,
+                        options: options.slice(0,4), // Asegurar máximo 4 opciones
+                        answer: correctAnswer,
+                        type: 'category_of_book'
+                    };
+                } else if (questionType === 1 && booksData.length > 3) { // ¿Qué libro viene después de X?
+                    let bookIndex;
+                    let book;
+                    do {
+                        bookIndex = Math.floor(Math.random() * (booksData.length - 1)); // Asegurar que no sea el último
+                        book = booksData[bookIndex];
+                    } while (bookIndex === booksData.length - 1); // Doble chequeo
+                    
+                    const correctAnswer = booksData[bookIndex + 1].name;
+                    const wrongBookIndices = [];
+                    let attempts = 0; // Para evitar bucles infinitos
+                    while(wrongBookIndices.length < 3 && attempts < booksData.length * 2) {
+                        const randomIndex = Math.floor(Math.random() * booksData.length);
+                        if (randomIndex !== bookIndex + 1 && randomIndex !== bookIndex && !wrongBookIndices.includes(randomIndex) && booksData[randomIndex].name !== correctAnswer) {
+                            wrongBookIndices.push(randomIndex);
+                        }
+                        attempts++;
+                    }
+                    const wrongAnswers = wrongBookIndices.map(idx => booksData[idx].name);
+                    const options = shuffleArray([correctAnswer, ...wrongAnswers]);
+                     questionData = {
+                        text: `¿Qué libro viene después de <strong>${book.name}</strong>?`,
+                        options: options.slice(0,4),
+                        answer: correctAnswer,
+                        type: 'book_after_book'
+                    };
+
+                } else { // ¿Cuál de estos libros pertenece a X categoría?
+                    const category = categories[Math.floor(Math.random() * categories.length)];
+                    const booksInCategory = booksData.filter(b => b.category === category);
+                    const booksNotInCat = booksData.filter(b => b.category !== category);
+                    
+                    shuffleArray(booksInCategory);
+                    shuffleArray(booksNotInCat);
+
+                    if (booksInCategory.length > 0 && booksNotInCat.length >=3) {
+                        const correctAnswer = booksInCategory[0].name;
+                        const wrongAnswers = booksNotInCat.slice(0, 3).map(b => b.name);
+                        const options = shuffleArray([correctAnswer, ...wrongAnswers]);
+                        questionData = {
+                            text: `¿Cuál de estos libros pertenece a la categoría de <strong>${category}</strong>?`,
+                            options: options.slice(0,4),
+                            answer: correctAnswer,
+                            type: 'book_in_category'
+                        };
+                    } else { // Fallback si no hay suficientes libros para la pregunta de tipo 2
+                         const book = availableBooks[(i + 1) % availableBooks.length]; 
+                         const correctAnswer = book.category;
+                         let wrongAnswersPool = categories.filter(cat => cat !== correctAnswer);
+                         shuffleArray(wrongAnswersPool);
+                         const options = shuffleArray([correctAnswer, ...wrongAnswersPool.slice(0, 3)]);
+                         questionData = {
+                             text: `¿A qué categoría pertenece el libro de <strong>${book.name}</strong>? (Fallback)`,
+                             options: options.slice(0,4),
+                             answer: correctAnswer,
+                             type: 'category_of_book'
+                         };
+                    }
+                }
+                questions.push(questionData);
+            }
+        }
+
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreEl.textContent = score;
+            generateQuestions();
+            totalQuestionsEl.textContent = TOTAL_QUESTIONS;
+            
+            startScreen.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            nextButton.classList.add('hidden');
+            
+            loadNextQuestion();
+        }
+
+        function loadNextQuestion() {
+            if (currentQuestionIndex < TOTAL_QUESTIONS) {
+                showQuestion(questions[currentQuestionIndex]);
+                currentQuestionNumberEl.textContent = currentQuestionIndex + 1;
+                progressBarEl.style.width = `${((currentQuestionIndex + 1) / TOTAL_QUESTIONS) * 100}%`;
+                feedbackTextEl.textContent = '';
+                feedbackTextEl.className = 'feedback-text text-center font-semibold mb-6'; // Reset class
+                nextButton.classList.add('hidden');
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function showQuestion(question) {
+            questionTextEl.innerHTML = question.text; 
+            optionsContainerEl.innerHTML = '';
+
+            // Asegurarse de que siempre haya 4 opciones, incluso si hay duplicados en el pool original
+            // (la lógica de generateQuestions ya intenta asegurar 4 opciones distintas)
+            let finalOptions = question.options;
+            if (!finalOptions || finalOptions.length === 0) { // Fallback extremo
+                finalOptions = ["Opción A", "Opción B", "Opción C", "Opción D"]; 
+                console.error("Error: Pregunta sin opciones válidas. Usando opciones de fallback.", question);
+            }
+
+
+            finalOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.classList.add('option-button', 'p-4', 'text-left', 'w-full', 'font-medium');
+                button.addEventListener('click', () => selectAnswer(button, option, question.answer));
+                optionsContainerEl.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, selectedOption, correctAnswer) {
+            const buttons = optionsContainerEl.querySelectorAll('.option-button');
+            buttons.forEach(btn => {
+                btn.disabled = true; 
+                if (btn.textContent === correctAnswer) {
+                    btn.classList.add('correct');
+                } else if (btn === button && selectedOption !== correctAnswer) {
+                    btn.classList.add('incorrect');
+                }
+            });
+
+            if (selectedOption === correctAnswer) {
+                score++;
+                scoreEl.textContent = score;
+                feedbackTextEl.textContent = '¡Correcto!';
+                feedbackTextEl.classList.add('text-green-600');
+            } else {
+                feedbackTextEl.innerHTML = `Incorrecto. La respuesta era: <strong>${correctAnswer}</strong>`;
+                feedbackTextEl.classList.add('text-red-600');
+            }
+            
+            currentQuestionIndex++;
+            nextButton.classList.remove('hidden');
+        }
+
+        function showEndScreen() {
+            quizScreen.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            finalScoreEl.textContent = `${score} de ${TOTAL_QUESTIONS}`;
+
+            let message = "";
+            const percentage = (score / TOTAL_QUESTIONS) * 100;
+            if (percentage === 100) {
+                message = "¡Excelente! ¡Conoces muy bien los libros de la Biblia!";
+            } else if (percentage >= 70) {
+                message = "¡Muy bien! Sigue practicando para perfeccionar tus conocimientos.";
+            } else if (percentage >= 50) {
+                message = "¡Buen intento! Un poco más de práctica y lo dominarás.";
+            } else {
+                message = "Sigue estudiando, ¡seguro mejorarás mucho!";
+            }
+            finalMessageEl.textContent = message;
+        }
+
+    </script>
+</body>
+</html>
