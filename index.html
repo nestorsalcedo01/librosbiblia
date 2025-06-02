@@ -57,8 +57,9 @@
             cursor: not-allowed;
         }
         .feedback-text {
-            min-height: 48px; /* Aumentado para más info */
+            min-height: 60px; /* Aumentado para más info, especialmente con Cristo */
             font-size: 0.9rem;
+            line-height: 1.4;
         }
         .book-info {
             background-color: #eef2ff; /* Fondo índigo muy claro para info del libro */
@@ -68,6 +69,7 @@
             margin-top: 8px;
             font-size: 0.85rem;
             border-left: 3px solid #4f46e5;
+            text-align: left; /* Asegurar alineación a la izquierda para la info */
         }
         .progress-bar-bg {
             background-color: #e5e7eb; 
@@ -91,11 +93,11 @@
 </head>
 <body class="p-4 md:p-8 flex flex-col items-center justify-center min-h-screen">
 
-    <div id="quiz-app" class="quiz-container w-full max-w-3xl p-6 md:p-8"> {/* Aumentado max-w */}
+    <div id="quiz-app" class="quiz-container w-full max-w-3xl p-6 md:p-8">
         
         <div id="start-screen" class="text-center">
             <h1 class="text-3xl font-bold text-indigo-700 mb-4">Cuestionario de los Libros de la Biblia</h1>
-            <p class="text-gray-700 mb-6">Pon a prueba tus conocimientos sobre los libros, sus categorías y su orden. ¡Buena suerte!</p>
+            <p class="text-gray-700 mb-6">Pon a prueba tus conocimientos sobre los libros, sus categorías, su orden y su relación con Cristo Jesús. ¡Buena suerte!</p>
             <img src="https://placehold.co/300x200/e0e7ff/4f46e5?text=La+Biblia" alt="Ilustración decorativa de la Biblia" class="mx-auto mb-6 rounded-lg shadow-md" onerror="this.src='https://placehold.co/300x200/cccccc/333333?text=Imagen+no+disponible'">
             <button id="start-button" class="start-button w-full sm:w-auto px-8 py-3 text-lg font-semibold">Comenzar Cuestionario</button>
         </div>
@@ -141,73 +143,73 @@
         // --- DATOS DE LOS LIBROS ---
         const booksData = [
             // Antiguo Testamento
-            { name: "Génesis", category: "Pentateuco", order: 1, info: "Origen del universo, la humanidad, el pecado y el pueblo de Israel a través de los patriarcas." },
-            { name: "Éxodo", category: "Pentateuco", order: 2, info: "Liberación de Israel de Egipto, entrega de la Ley en el Sinaí y construcción del Tabernáculo." },
-            { name: "Levítico", category: "Pentateuco", order: 3, info: "Leyes ceremoniales, sacrificios y pureza para Israel, enfatizando la santidad de Dios." },
-            { name: "Números", category: "Pentateuco", order: 4, info: "Censo y peregrinaje de Israel por el desierto, sus rebeliones y preparación para Canaán." },
-            { name: "Deuteronomio", category: "Pentateuco", order: 5, info: "Discursos de Moisés repasando la Ley e instando a la obediencia antes de entrar a la Tierra Prometida." },
-            { name: "Josué", category: "Históricos (AT)", order: 6, info: "Conquista y división de la Tierra Prometida bajo el liderazgo de Josué." },
-            { name: "Jueces", category: "Históricos (AT)", order: 7, info: "Ciclos de pecado, opresión y liberación de Israel a través de líderes llamados jueces." },
-            { name: "Rut", category: "Históricos (AT)", order: 8, info: "Historia de lealtad y redención en tiempos de los jueces, mostrando el linaje de David." },
-            { name: "1 Samuel", category: "Históricos (AT)", order: 9, info: "Transición a la monarquía, con el profeta Samuel y los reinados de Saúl y David." },
-            { name: "2 Samuel", category: "Históricos (AT)", order: 10, info: "Reinado de David, sus triunfos, pecados y establecimiento de Jerusalén como capital." },
-            { name: "1 Reyes", category: "Históricos (AT)", order: 11, info: "Reinado de Salomón, construcción del Templo y división del reino (Israel y Judá)." },
-            { name: "2 Reyes", category: "Históricos (AT)", order: 12, info: "Historia de los reinos divididos, sus reyes y el exilio de Israel y Judá." },
-            { name: "1 Crónicas", category: "Históricos (AT)", order: 13, info: "Recuento de la historia desde Adán hasta David, con enfoque en el linaje davídico y el Templo." },
-            { name: "2 Crónicas", category: "Históricos (AT)", order: 14, info: "Reinado de Salomón e historia del reino de Judá, hasta el decreto de Ciro." },
-            { name: "Esdras", category: "Históricos (AT)", order: 15, info: "Regreso de los exiliados de Babilonia y reconstrucción del Templo." },
-            { name: "Nehemías", category: "Históricos (AT)", order: 16, info: "Reconstrucción de las murallas de Jerusalén y reforma espiritual del pueblo." },
-            { name: "Ester", category: "Históricos (AT)", order: 17, info: "Una joven judía reina de Persia salva a su pueblo, mostrando la providencia de Dios." },
-            { name: "Job", category: "Sapienciales y Poéticos", order: 18, info: "Explora el sufrimiento de los justos y la soberanía de Dios." },
-            { name: "Salmos", category: "Sapienciales y Poéticos", order: 19, info: "Colección de 150 cánticos, oraciones y poemas para la adoración y la vida devocional." },
-            { name: "Proverbios", category: "Sapienciales y Poéticos", order: 20, info: "Dichos sabios para vivir una vida justa y piadosa en el temor de Dios." },
-            { name: "Eclesiastés", category: "Sapienciales y Poéticos", order: 21, info: "Reflexión sobre el significado de la vida 'debajo del sol' y el temor a Dios." },
-            { name: "Cantar de los Cantares", category: "Sapienciales y Poéticos", order: 22, info: "Poema que celebra el amor matrimonial, también interpretado alegóricamente." },
-            { name: "Isaías", category: "Profetas Mayores", order: 23, info: "Profecías sobre juicio, restauración y detalladas predicciones mesiánicas." },
-            { name: "Jeremías", category: "Profetas Mayores", order: 24, info: "Llamado al arrepentimiento ante la inminente caída de Judá y la promesa de un nuevo pacto." },
-            { name: "Lamentaciones", category: "Profetas Mayores", order: 25, info: "Poemas que lamentan la destrucción de Jerusalén y el Templo." },
-            { name: "Ezequiel", category: "Profetas Mayores", order: 26, info: "Profecías a los exiliados sobre la santidad de Dios, la responsabilidad y la restauración futura." },
-            { name: "Daniel", category: "Profetas Mayores", order: 27, info: "Experiencias en cortes paganas y visiones proféticas sobre imperios y el reino de Dios." },
-            { name: "Oseas", category: "Profetas Menores", order: 28, info: "Metáfora del matrimonio del profeta para ilustrar el amor de Dios por el Israel infiel." },
-            { name: "Joel", category: "Profetas Menores", order: 29, info: "Describe una plaga de langostas como juicio y promete la efusión del Espíritu." },
-            { name: "Amós", category: "Profetas Menores", order: 30, info: "Denuncia la injusticia social, la idolatría y la complacencia en Israel." },
-            { name: "Abdías", category: "Profetas Menores", order: 31, info: "Profecía del juicio de Edom por su hostilidad hacia Judá." },
-            { name: "Jonás", category: "Profetas Menores", order: 32, info: "Historia del profeta reacio, mostrando la misericordia de Dios hacia todas las naciones." },
-            { name: "Miqueas", category: "Profetas Menores", order: 33, info: "Denuncia la injusticia y profetiza la caída, pero también la venida del Mesías de Belén." },
-            { name: "Nahúm", category: "Profetas Menores", order: 34, info: "Profetiza la destrucción de Nínive como juicio divino por su crueldad." },
-            { name: "Habacuc", category: "Profetas Menores", order: 35, info: "Diálogo sobre la justicia divina, aprendiendo a confiar en Dios." },
-            { name: "Sofonías", category: "Profetas Menores", order: 36, info: "Advierte sobre el 'día del Señor' y ofrece esperanza de restauración." },
-            { name: "Hageo", category: "Profetas Menores", order: 37, info: "Anima a los judíos retornados a reconstruir el Templo." },
-            { name: "Zacarías", category: "Profetas Menores", order: 38, info: "Visiones simbólicas y profecías sobre la reconstrucción, Israel y el Mesías." },
-            { name: "Malaquías", category: "Profetas Menores", order: 39, info: "Confronta la apatía religiosa y profetiza la venida de Elías antes del día del Señor." },
+            { name: "Génesis", category: "Pentateuco", order: 1, info: "Origen del universo, la humanidad, el pecado y el pueblo de Israel. <strong>Relación con Cristo:</strong> Contiene la primera promesa mesiánica (la 'simiente de la mujer', Gén. 3:15) y prefigura a Cristo en personajes como Abel, Melquisedec y José, y en el pacto con Abraham." },
+            { name: "Éxodo", category: "Pentateuco", order: 2, info: "Liberación de Israel de Egipto, entrega de la Ley y construcción del Tabernáculo. <strong>Relación con Cristo:</strong> Cristo es nuestro Cordero Pascual (1 Cor. 5:7), el libertador de la esclavitud del pecado, y el Tabernáculo prefigura su presencia entre nosotros (Juan 1:14)." },
+            { name: "Levítico", category: "Pentateuco", order: 3, info: "Leyes ceremoniales, sacrificios y pureza, enfatizando la santidad de Dios. <strong>Relación con Cristo:</strong> El sistema sacrificial apunta al sacrificio perfecto y definitivo de Cristo (Heb. 9-10). Él es nuestro Sumo Sacerdote y el cumplimiento de las fiestas." },
+            { name: "Números", category: "Pentateuco", order: 4, info: "Censo y peregrinaje de Israel por el desierto, sus rebeliones y preparación para Canaán. <strong>Relación con Cristo:</strong> La serpiente de bronce levantada (Núm. 21) es un tipo de Cristo crucificado (Juan 3:14-15). Cristo es nuestro guía y sustento en el desierto de la vida." },
+            { name: "Deuteronomio", category: "Pentateuco", order: 5, info: "Discursos de Moisés repasando la Ley e instando a la obediencia. <strong>Relación con Cristo:</strong> Profetiza un profeta como Moisés, a quien el pueblo debía oír (Deut. 18:15-19), cumplido en Jesús (Hech. 3:22-23). Cristo es la Palabra de Dios encarnada." },
+            { name: "Josué", category: "Históricos (AT)", order: 6, info: "Conquista y división de la Tierra Prometida. <strong>Relación con Cristo:</strong> Josué (Yeshúa) significa 'Yahvé salva', el mismo nombre que Jesús. Él nos introduce en nuestro reposo espiritual (Heb. 4) y nos da la victoria sobre nuestros enemigos." },
+            { name: "Jueces", category: "Históricos (AT)", order: 7, info: "Ciclos de pecado, opresión y liberación de Israel. <strong>Relación con Cristo:</strong> Los jueces son libertadores temporales que prefiguran a Cristo, el Libertador perfecto y Juez final que trae salvación duradera." },
+            { name: "Rut", category: "Históricos (AT)", order: 8, info: "Historia de lealtad y redención en tiempos de los jueces. <strong>Relación con Cristo:</strong> Booz actúa como pariente redentor (goel), un tipo de Cristo, quien nos redime. Rut es parte del linaje mesiánico (Mat. 1:5)." },
+            { name: "1 Samuel", category: "Históricos (AT)", order: 9, info: "Transición a la monarquía, con Samuel, Saúl y David. <strong>Relación con Cristo:</strong> David, el rey ungido, es un tipo prominente de Cristo, el Rey Mesías. El anhelo por un rey justo apunta a Jesús." },
+            { name: "2 Samuel", category: "Históricos (AT)", order: 10, info: "Reinado de David, sus triunfos y pecados. <strong>Relación con Cristo:</strong> Se establece el pacto davídico (2 Sam. 7), prometiendo un descendiente cuyo reino será eterno, cumplido en Cristo." },
+            { name: "1 Reyes", category: "Históricos (AT)", order: 11, info: "Reinado de Salomón, construcción del Templo y división del reino. <strong>Relación con Cristo:</strong> Salomón, en su sabiduría y construcción del Templo, prefigura a Cristo, quien es la sabiduría de Dios (1 Cor. 1:24) y el verdadero Templo (Juan 2:19-21)." },
+            { name: "2 Reyes", category: "Históricos (AT)", order: 12, info: "Historia de los reinos divididos y el exilio. <strong>Relación con Cristo:</strong> La infidelidad de los reyes y el pueblo subraya la necesidad de un Rey perfecto y un nuevo pacto, que Cristo establece." },
+            { name: "1 Crónicas", category: "Históricos (AT)", order: 13, info: "Recuento de la historia con enfoque en el linaje davídico y el Templo. <strong>Relación con Cristo:</strong> Enfatiza la línea real de David y la importancia de la adoración verdadera, ambas cumplidas y perfeccionadas en Cristo." },
+            { name: "2 Crónicas", category: "Históricos (AT)", order: 14, info: "Reinado de Salomón e historia del reino de Judá. <strong>Relación con Cristo:</strong> Destaca la gracia de Dios en medio del juicio y la esperanza de restauración, apuntando a la obra redentora de Cristo." },
+            { name: "Esdras", category: "Históricos (AT)", order: 15, info: "Regreso de los exiliados y reconstrucción del Templo. <strong>Relación con Cristo:</strong> La restauración del Templo y la comunidad prefigura la obra de Cristo al edificar su Iglesia y restaurar nuestra relación con Dios." },
+            { name: "Nehemías", category: "Históricos (AT)", order: 16, info: "Reconstrucción de las murallas de Jerusalén y reforma espiritual. <strong>Relación con Cristo:</strong> Nehemías como líder y restaurador es un tipo de Cristo, quien reconstruye nuestras vidas y nos protege del enemigo." },
+            { name: "Ester", category: "Históricos (AT)", order: 17, info: "Una joven judía reina de Persia salva a su pueblo. <strong>Relación con Cristo:</strong> Aunque Dios no es nombrado, su providencia soberana para salvar a su pueblo apunta a la gran salvación provista por Cristo." },
+            { name: "Job", category: "Sapienciales y Poéticos", order: 18, info: "Explora el sufrimiento de los justos y la soberanía de Dios. <strong>Relación con Cristo:</strong> Job anhela un mediador (Job 9:33) y expresa fe en un Redentor viviente (Job 19:25), ambos cumplidos en Cristo, el Siervo Sufriente." },
+            { name: "Salmos", category: "Sapienciales y Poéticos", order: 19, info: "Colección de cánticos, oraciones y poemas. <strong>Relación con Cristo:</strong> Contiene numerosas profecías mesiánicas sobre su vida, sufrimiento, muerte, resurrección y reinado (ej. Sal. 2, 22, 110, 118). Jesús mismo citó los Salmos refiriéndose a Él." },
+            { name: "Proverbios", category: "Sapienciales y Poéticos", order: 20, info: "Dichos sabios para vivir una vida justa. <strong>Relación con Cristo:</strong> Cristo es la personificación de la sabiduría divina (Prov. 8; 1 Cor. 1:24, 30). Vivir sabiamente es vivir en sumisión a Él." },
+            { name: "Eclesiastés", category: "Sapienciales y Poéticos", order: 21, info: "Reflexión sobre el significado de la vida 'debajo del sol'. <strong>Relación con Cristo:</strong> Muestra la vanidad de la vida sin Dios, apuntando a Cristo como Aquel que da verdadero significado y propósito eterno." },
+            { name: "Cantar de los Cantares", category: "Sapienciales y Poéticos", order: 22, info: "Poema que celebra el amor matrimonial. <strong>Relación con Cristo:</strong> Tradicionalmente interpretado como una alegoría del amor entre Cristo (el Esposo) y la Iglesia (su Esposa)." },
+            { name: "Isaías", category: "Profetas Mayores", order: 23, info: "Profecías sobre juicio, restauración y predicciones mesiánicas. <strong>Relación con Cristo:</strong> Es llamado el 'Evangelio del Antiguo Testamento' por sus detalladas profecías sobre el nacimiento virginal de Cristo (7:14), su deidad (9:6), su ministerio (61:1-2) y su sufrimiento y muerte expiatoria (cap. 53)." },
+            { name: "Jeremías", category: "Profetas Mayores", order: 24, info: "Llamado al arrepentimiento y la promesa de un nuevo pacto. <strong>Relación con Cristo:</strong> Profetiza el Nuevo Pacto (Jer. 31:31-34) que Cristo inauguró con su sangre (Luc. 22:20). También se le llama 'el Renuevo justo' de David (Jer. 23:5)." },
+            { name: "Lamentaciones", category: "Profetas Mayores", order: 25, info: "Poemas que lamentan la destrucción de Jerusalén. <strong>Relación con Cristo:</strong> Refleja el sufrimiento por el pecado y la necesidad de arrepentimiento. Cristo lloró por Jerusalén (Luc. 19:41) y llevó el sufrimiento por nuestros pecados." },
+            { name: "Ezequiel", category: "Profetas Mayores", order: 26, info: "Profecías sobre la santidad de Dios, la responsabilidad y la restauración. <strong>Relación con Cristo:</strong> Habla de un 'pastor' davídico (Ez. 34:23) y un nuevo corazón y espíritu (Ez. 36:26-27), cumplido en Cristo y la obra del Espíritu Santo." },
+            { name: "Daniel", category: "Profetas Mayores", order: 27, info: "Experiencias en cortes paganas y visiones proféticas. <strong>Relación con Cristo:</strong> Se refiere a Cristo como el 'Hijo del Hombre' (Dan. 7:13-14), la 'piedra' que destruye los reinos del mundo (Dan. 2), y profetiza el tiempo de su venida y muerte ('Mesías Príncipe', Dan. 9:24-27)." },
+            { name: "Oseas", category: "Profetas Menores", order: 28, info: "Metáfora del matrimonio del profeta para ilustrar el amor de Dios. <strong>Relación con Cristo:</strong> El amor redentor de Dios por Israel infiel prefigura el amor de Cristo por su Iglesia. Mateo cita Oseas 11:1 en referencia a Jesús (Mat. 2:15)." },
+            { name: "Joel", category: "Profetas Menores", order: 29, info: "Describe una plaga como juicio y promete la efusión del Espíritu. <strong>Relación con Cristo:</strong> La promesa del derramamiento del Espíritu (Joel 2:28-32) se cumple en Pentecostés después de la ascensión de Cristo (Hech. 2)." },
+            { name: "Amós", category: "Profetas Menores", order: 30, info: "Denuncia la injusticia social y la idolatría. <strong>Relación con Cristo:</strong> Llama a la justicia y rectitud, que son fundamentales en el Reino de Cristo. Profetiza la restauración del tabernáculo caído de David (Amós 9:11), cumplido en Cristo y su Iglesia (Hech. 15:16-17)." },
+            { name: "Abdías", category: "Profetas Menores", order: 31, info: "Profecía del juicio de Edom. <strong>Relación con Cristo:</strong> Muestra la justicia de Dios contra los enemigos de su pueblo, anticipando la victoria final de Cristo sobre todo mal." },
+            { name: "Jonás", category: "Profetas Menores", order: 32, info: "Historia del profeta reacio y la misericordia de Dios. <strong>Relación con Cristo:</strong> Jesús usó los 'tres días y tres noches' de Jonás en el pez como señal de su propia muerte y resurrección (Mat. 12:39-41)." },
+            { name: "Miqueas", category: "Profetas Menores", order: 33, info: "Denuncia la injusticia y profetiza la caída y la venida del Mesías. <strong>Relación con Cristo:</strong> Profetiza el lugar de nacimiento de Cristo en Belén (Miq. 5:2; Mat. 2:6) y describe su futuro reinado de paz." },
+            { name: "Nahúm", category: "Profetas Menores", order: 34, info: "Profetiza la destrucción de Nínive. <strong>Relación con Cristo:</strong> Muestra la justicia de Dios y su soberanía sobre las naciones, temas que encuentran su clímax en el juicio y reinado de Cristo." },
+            { name: "Habacuc", category: "Profetas Menores", order: 35, info: "Diálogo sobre la justicia divina. <strong>Relación con Cristo:</strong> La afirmación 'el justo por su fe vivirá' (Hab. 2:4) es central en la enseñanza de Pablo sobre la justificación por la fe en Cristo (Rom. 1:17; Gál. 3:11)." },
+            { name: "Sofonías", category: "Profetas Menores", order: 36, info: "Advierte sobre el 'día del Señor' y ofrece esperanza. <strong>Relación con Cristo:</strong> El 'día del Señor' apunta al juicio final y la restauración que Cristo traerá. También habla de Dios regocijándose sobre su pueblo redimido (Sof. 3:17)." },
+            { name: "Hageo", category: "Profetas Menores", order: 37, info: "Anima a reconstruir el Templo. <strong>Relación con Cristo:</strong> Profetiza que la gloria del segundo templo será mayor que la del primero (Hag. 2:9), lo cual se cumple con la venida de Cristo, la gloria de Dios encarnada, a ese templo." },
+            { name: "Zacarías", category: "Profetas Menores", order: 38, info: "Visiones simbólicas y profecías sobre la reconstrucción y el Mesías. <strong>Relación con Cristo:</strong> Contiene múltiples profecías detalladas sobre Cristo: su entrada humilde en Jerusalén (9:9), su traición por treinta piezas de plata (11:12-13), su crucifixión (12:10 'mirarán a mí, a quien traspasaron'), y su futuro reinado." },
+            { name: "Malaquías", category: "Profetas Menores", order: 39, info: "Confronta la apatía religiosa y profetiza la venida de Elías. <strong>Relación con Cristo:</strong> Profetiza la venida de un mensajero (Elías, cumplido en Juan el Bautista) para preparar el camino del Señor (Mal. 3:1; 4:5-6), y la venida del 'Sol de justicia' (Mal. 4:2), refiriéndose a Cristo." },
             // Nuevo Testamento
-            { name: "Mateo", category: "Evangelios", order: 40, info: "Presenta a Jesús como el Mesías Rey, cumpliendo las profecías del Antiguo Testamento." },
-            { name: "Marcos", category: "Evangelios", order: 41, info: "Describe a Jesús como el Siervo sufriente y poderoso, enfatizando sus acciones." },
-            { name: "Lucas", category: "Evangelios", order: 42, info: "Retrata a Jesús como el Salvador de toda la humanidad, con énfasis en los marginados." },
-            { name: "Juan", category: "Evangelios", order: 43, info: "Revela la divinidad de Jesús como el Hijo de Dios, a través de señales y discursos." },
-            { name: "Hechos de los Apóstoles", category: "Histórico (NT)", order: 44, info: "Narra el nacimiento y la expansión de la iglesia primitiva por obra del Espíritu Santo." },
-            { name: "Romanos", category: "Cartas Paulinas", order: 45, info: "Exposición detallada de la justificación por la fe y la vida en el Espíritu." },
-            { name: "1 Corintios", category: "Cartas Paulinas", order: 46, info: "Aborda problemas doctrinales y prácticos en la iglesia de Corinto." },
-            { name: "2 Corintios", category: "Cartas Paulinas", order: 47, info: "Defensa del apostolado de Pablo y llamado a la reconciliación y generosidad." },
-            { name: "Gálatas", category: "Cartas Paulinas", order: 48, info: "Defiende la justificación por la fe sola, contra la legalismo judaizante." },
-            { name: "Efesios", category: "Cartas Paulinas", order: 49, info: "Describe la iglesia como el cuerpo de Cristo y la unidad de los creyentes en Él." },
-            { name: "Filipenses", category: "Cartas Paulinas", order: 50, info: "Carta de gozo y gratitud, animando a la humildad y unidad en Cristo." },
-            { name: "Colosenses", category: "Cartas Paulinas", order: 51, info: "Exalta la supremacía y suficiencia de Cristo frente a falsas enseñanzas." },
-            { name: "1 Tesalonicenses", category: "Cartas Paulinas", order: 52, info: "Anima a los creyentes sobre la segunda venida de Cristo y la vida santa." },
-            { name: "2 Tesalonicenses", category: "Cartas Paulinas", order: 53, info: "Aclara enseñanzas sobre la segunda venida y exhorta a la perseverancia." },
-            { name: "1 Timoteo", category: "Cartas Paulinas", order: 54, info: "Instrucciones para el liderazgo, la adoración y la conducta en la iglesia." },
-            { name: "2 Timoteo", category: "Cartas Paulinas", order: 55, info: "Última carta de Pablo, animando a Timoteo a la fidelidad y perseverancia en el ministerio." },
-            { name: "Tito", category: "Cartas Paulinas", order: 56, info: "Instrucciones para establecer el orden y el liderazgo en las iglesias de Creta." },
-            { name: "Filemón", category: "Cartas Paulinas", order: 57, info: "Petición personal de Pablo a Filemón para que perdone y restaure a su esclavo Onésimo." },
-            { name: "Hebreos", category: "Cartas Generales", order: 58, info: "Demuestra la superioridad de Cristo y el nuevo pacto sobre el antiguo." },
-            { name: "Santiago", category: "Cartas Generales", order: 59, info: "Enfatiza la importancia de las obras como evidencia de una fe genuina." },
-            { name: "1 Pedro", category: "Cartas Generales", order: 60, info: "Anima a los creyentes a vivir santamente en medio del sufrimiento y la persecución." },
-            { name: "2 Pedro", category: "Cartas Generales", order: 61, info: "Advierte contra los falsos maestros y exhorta al crecimiento espiritual." },
-            { name: "1 Juan", category: "Cartas Generales", order: 62, info: "Asegura a los creyentes su comunión con Dios y define las marcas de un verdadero cristiano." },
-            { name: "2 Juan", category: "Cartas Generales", order: 63, info: "Advierte contra apoyar a los falsos maestros y exhorta a caminar en la verdad y el amor." },
-            { name: "3 Juan", category: "Cartas Generales", order: 64, info: "Elogia a Gayo por su hospitalidad y condena la oposición de Diótrefes." },
-            { name: "Judas", category: "Cartas Generales", order: 65, info: "Exhorta a contender ardientemente por la fe contra las falsas enseñanzas." },
-            { name: "Apocalipsis", category: "Profético (NT)", order: 66, info: "Revelación de Jesucristo sobre los eventos finales, la victoria de Cristo y la nueva creación." }
+            { name: "Mateo", category: "Evangelios", order: 40, info: "Presenta a Jesús como el Mesías Rey, cumpliendo las profecías del AT. <strong>Relación con Cristo:</strong> Todo el libro se centra en demostrar que Jesús es el Cristo, el Hijo de David, el Rey prometido, a través de sus enseñanzas (Sermón del Monte), milagros y el cumplimiento de la profecía." },
+            { name: "Marcos", category: "Evangelios", order: 41, info: "Describe a Jesús como el Siervo sufriente y poderoso, enfatizando sus acciones. <strong>Relación con Cristo:</strong> Muestra a Jesús en acción, como el Hijo de Dios poderoso y el Siervo que vino a servir y dar su vida en rescate por muchos (Mar. 10:45)." },
+            { name: "Lucas", category: "Evangelios", order: 42, info: "Retrata a Jesús como el Salvador de toda la humanidad, con énfasis en los marginados. <strong>Relación con Cristo:</strong> Presenta a Jesús como el Hijo del Hombre, el Salvador universal, con una genealogía que se remonta a Adán, mostrando su relevancia para todos." },
+            { name: "Juan", category: "Evangelios", order: 43, info: "Revela la divinidad de Jesús como el Hijo de Dios, a través de señales y discursos. <strong>Relación con Cristo:</strong> Enfatiza la deidad de Jesús (el Verbo hecho carne, Juan 1:1,14), sus 'Yo soy', y su propósito de dar vida eterna a los que creen (Juan 20:31)." },
+            { name: "Hechos de los Apóstoles", category: "Histórico (NT)", order: 44, info: "Narra el nacimiento y la expansión de la iglesia primitiva por obra del Espíritu Santo. <strong>Relación con Cristo:</strong> Demuestra el poder de Cristo resucitado y ascendido obrando a través de sus apóstoles y el Espíritu Santo para establecer y expandir su Iglesia." },
+            { name: "Romanos", category: "Cartas Paulinas", order: 45, info: "Exposición detallada de la justificación por la fe y la vida en el Espíritu. <strong>Relación con Cristo:</strong> Explica cómo la justicia de Dios se revela a través de la fe en Jesucristo para salvación de todos los que creen. Cristo es el centro de la justificación, santificación y glorificación." },
+            { name: "1 Corintios", category: "Cartas Paulinas", order: 46, info: "Aborda problemas doctrinales y prácticos en la iglesia de Corinto. <strong>Relación con Cristo:</strong> Presenta a Cristo crucificado como la sabiduría y el poder de Dios, y aborda la vida cristiana en relación con la señoría de Cristo (ej. la Cena del Señor, los dones espirituales, la resurrección)." },
+            { name: "2 Corintios", category: "Cartas Paulinas", order: 47, info: "Defensa del apostolado de Pablo y llamado a la reconciliación. <strong>Relación con Cristo:</strong> Destaca el ministerio de la reconciliación a través de Cristo (2 Cor. 5:18-20) y el poder de Dios manifestado en la debilidad, reflejando el sufrimiento y la gloria de Cristo." },
+            { name: "Gálatas", category: "Cartas Paulinas", order: 48, info: "Defiende la justificación por la fe sola, contra la legalismo. <strong>Relación con Cristo:</strong> Afirma que la salvación es por gracia mediante la fe en Cristo, no por obras de la ley. 'Con Cristo estoy juntamente crucificado...' (Gál. 2:20)." },
+            { name: "Efesios", category: "Cartas Paulinas", order: 49, info: "Describe la iglesia como el cuerpo de Cristo y la unidad de los creyentes. <strong>Relación con Cristo:</strong> Exalta a Cristo como cabeza de la Iglesia, la cual es su cuerpo. Detalla las bendiciones espirituales que tenemos 'en Cristo'." },
+            { name: "Filipenses", category: "Cartas Paulinas", order: 50, info: "Carta de gozo y gratitud, animando a la humildad y unidad. <strong>Relación con Cristo:</strong> Contiene el gran himno cristológico sobre la humillación y exaltación de Cristo (Fil. 2:5-11). Anima a tener 'la mente de Cristo'." },
+            { name: "Colosenses", category: "Cartas Paulinas", order: 51, info: "Exalta la supremacía y suficiencia de Cristo frente a falsas enseñanzas. <strong>Relación con Cristo:</strong> Declara la preeminencia de Cristo como Creador, Sustentador, Cabeza de la Iglesia y la plenitud de la Deidad encarnada (Col. 1:15-20; 2:9)." },
+            { name: "1 Tesalonicenses", category: "Cartas Paulinas", order: 52, info: "Anima a los creyentes sobre la segunda venida de Cristo y la vida santa. <strong>Relación con Cristo:</strong> Se enfoca en la esperanza de la venida del Señor Jesús y cómo vivir en santidad mientras se espera su regreso." },
+            { name: "2 Tesalonicenses", category: "Cartas Paulinas", order: 53, info: "Aclara enseñanzas sobre la segunda venida y exhorta a la perseverancia. <strong>Relación con Cristo:</strong> Corrige malentendidos sobre el 'día del Señor' y anima a la fidelidad hasta la manifestación gloriosa de Cristo." },
+            { name: "1 Timoteo", category: "Cartas Paulinas", order: 54, info: "Instrucciones para el liderazgo, la adoración y la conducta en la iglesia. <strong>Relación con Cristo:</strong> Presenta a Cristo Jesús como el 'único mediador entre Dios y los hombres' (1 Tim. 2:5) y da pautas para la iglesia que es 'columna y baluarte de la verdad'." },
+            { name: "2 Timoteo", category: "Cartas Paulinas", order: 55, info: "Última carta de Pablo, animando a Timoteo a la fidelidad. <strong>Relación con Cristo:</strong> Exhorta a no avergonzarse del testimonio de nuestro Señor y a perseverar en la fe en Cristo Jesús, quien ha abolido la muerte y sacado a luz la vida (2 Tim. 1:8-10)." },
+            { name: "Tito", category: "Cartas Paulinas", order: 56, info: "Instrucciones para establecer el orden y el liderazgo en las iglesias de Creta. <strong>Relación con Cristo:</strong> Enfatiza la gracia de Dios que se manifestó para salvación, enseñándonos a vivir aguardando 'la esperanza bienaventurada y la manifestación gloriosa de nuestro gran Dios y Salvador Jesucristo' (Tito 2:11-13)." },
+            { name: "Filemón", category: "Cartas Paulinas", order: 57, info: "Petición personal de Pablo a Filemón para que perdone a su esclavo Onésimo. <strong>Relación con Cristo:</strong> Ilustra el perdón y la reconciliación que tenemos en Cristo. Pablo intercede por Onésimo como Cristo intercede por nosotros." },
+            { name: "Hebreos", category: "Cartas Generales", order: 58, info: "Demuestra la superioridad de Cristo y el nuevo pacto sobre el antiguo. <strong>Relación con Cristo:</strong> Presenta a Cristo como superior a los ángeles, a Moisés, a Josué, y al sacerdocio levítico. Él es el Sumo Sacerdote perfecto según el orden de Melquisedec y el mediador de un mejor pacto." },
+            { name: "Santiago", category: "Cartas Generales", order: 59, info: "Enfatiza la importancia de las obras como evidencia de una fe genuina. <strong>Relación con Cristo:</strong> Se dirige a los siervos 'de Dios y del Señor Jesucristo'. La fe que salva es una fe que obra, demostrando la transformación realizada por Cristo." },
+            { name: "1 Pedro", category: "Cartas Generales", order: 60, info: "Anima a los creyentes a vivir santamente en medio del sufrimiento. <strong>Relación con Cristo:</strong> Llama a seguir el ejemplo de Cristo en sus sufrimientos y exalta la 'esperanza viva' que tenemos por su resurrección. Somos 'linaje escogido... para anunciar las virtudes de aquel que os llamó'." },
+            { name: "2 Pedro", category: "Cartas Generales", order: 61, info: "Advierte contra los falsos maestros y exhorta al crecimiento espiritual. <strong>Relación con Cristo:</strong> Anima a crecer 'en la gracia y el conocimiento de nuestro Señor y Salvador Jesucristo' (2 Ped. 3:18) y advierte sobre la negación de su señorío." },
+            { name: "1 Juan", category: "Cartas Generales", order: 62, info: "Asegura a los creyentes su comunión con Dios y define las marcas de un verdadero cristiano. <strong>Relación con Cristo:</strong> Enfatiza que Jesús es el Cristo, el Hijo de Dios venido en carne, y que la comunión con Él se manifiesta en obediencia y amor. 'Dios nos ha dado vida eterna; y esta vida está en su Hijo'." },
+            { name: "2 Juan", category: "Cartas Generales", order: 63, info: "Advierte contra apoyar a los falsos maestros. <strong>Relación con Cristo:</strong> Exhorta a permanecer en la 'doctrina de Cristo' y a no recibir a quienes no la traen, especialmente a aquellos que niegan que Jesucristo ha venido en carne." },
+            { name: "3 Juan", category: "Cartas Generales", order: 64, info: "Elogia a Gayo por su hospitalidad y condena la oposición de Diótrefes. <strong>Relación con Cristo:</strong> Anima a imitar lo bueno y a apoyar a aquellos que sirven fielmente a la verdad de Cristo." },
+            { name: "Judas", category: "Cartas Generales", order: 65, info: "Exhorta a contender ardientemente por la fe contra las falsas enseñanzas. <strong>Relación con Cristo:</strong> Llama a edificarse sobre la santísima fe y a conservarse en el amor de Dios, esperando la misericordia de nuestro Señor Jesucristo para vida eterna." },
+            { name: "Apocalipsis", category: "Profético (NT)", order: 66, info: "Revelación de Jesucristo sobre los eventos finales, la victoria de Cristo y la nueva creación. <strong>Relación con Cristo:</strong> Es 'la revelación de Jesucristo'. Lo presenta como el Cordero inmolado y el Rey victorioso, el Alfa y la Omega, que vendrá otra vez para juzgar y reinar eternamente." }
         ];
 
         const categories = [
@@ -216,11 +218,11 @@
             "Histórico (NT)", "Cartas Paulinas", "Cartas Generales", "Profético (NT)"
         ];
 
-        const TOTAL_QUESTIONS = 20; // Aumentado para más variedad
+        const TOTAL_QUESTIONS = 20; 
         let currentQuestionIndex = 0;
         let score = 0;
         let questions = [];
-        let userSelections = []; // Para preguntas de selección múltiple ordenada
+        let userSelections = []; 
 
         // --- ELEMENTOS DEL DOM ---
         const startScreen = document.getElementById('start-screen');
@@ -259,15 +261,13 @@
 
         function getBookInfo(bookName) {
             const book = booksData.find(b => b.name === bookName);
-            return book ? `<div class="book-info"><strong>${book.name}:</strong> ${book.info}</div>` : '';
+            // Envolvemos la parte de "Relación con Cristo" en un span para posible estilo futuro si es necesario
+            return book ? `<div class="book-info"><strong>${book.name}:</strong> ${book.info.replace(/(<strong>Relación con Cristo:<\/strong>)/g, '<br>$1')}</div>` : '';
         }
         
         function getCategoryInfo(categoryName) {
-            // Podríamos añadir descripciones a las categorías si se desea.
-            // Por ahora, solo devolvemos el nombre.
             return `<div class="book-info">Categoría: <strong>${categoryName}</strong></div>`;
         }
-
 
         function generateQuestions() {
             questions = [];
@@ -275,10 +275,10 @@
             shuffleArray(availableBooks);
 
             for (let i = 0; i < TOTAL_QUESTIONS; i++) {
-                const questionTypeRoll = Math.random(); // 0 a 1
+                const questionTypeRoll = Math.random(); 
                 let questionData;
 
-                if (questionTypeRoll < 0.25) { // Tipo 1: ¿A qué categoría pertenece X? (25%)
+                if (questionTypeRoll < 0.25) { 
                     const book = availableBooks[i % availableBooks.length];
                     const correctAnswer = book.category;
                     let wrongAnswersPool = categories.filter(cat => cat !== correctAnswer);
@@ -288,26 +288,26 @@
                         text: `¿A qué categoría pertenece el libro de <strong>${book.name}</strong>?`,
                         options: options.slice(0,4),
                         answer: correctAnswer,
-                        correctBookName: book.name, // Para mostrar info
+                        correctBookName: book.name, 
                         type: 'category_of_book'
                     };
-                } else if (questionTypeRoll < 0.5) { // Tipo 2: ¿Qué libro viene después de X? (25%)
+                } else if (questionTypeRoll < 0.5) { 
                     let bookIndex;
                     let book;
                     do { bookIndex = Math.floor(Math.random() * (booksData.length - 1)); 
                          book = booksData[bookIndex];
-                    } while (book.order >= booksData.length); // Asegurar que no sea el último por orden
+                    } while (book.order >= booksData.length); 
                     
                     const correctAnswer = booksData.find(b => b.order === book.order + 1)?.name;
-                    if (!correctAnswer) { // Fallback si algo va mal con el orden
+                    if (!correctAnswer) { 
                         i--; continue; 
                     }
 
                     let wrongAnswers = [];
                     let tempBooks = shuffleArray([...booksData]);
-                    for(let b of tempBooks) {
-                        if (b.name !== correctAnswer && b.name !== book.name && wrongAnswers.length < 3) {
-                            wrongAnswers.push(b.name);
+                    for(let b_item of tempBooks) { // Renombrado 'b' a 'b_item' para evitar conflicto con el 'b' global de booksData
+                        if (b_item.name !== correctAnswer && b_item.name !== book.name && wrongAnswers.length < 3) {
+                            wrongAnswers.push(b_item.name);
                         }
                     }
                     const options = shuffleArray([correctAnswer, ...wrongAnswers]);
@@ -317,12 +317,12 @@
                         answer: correctAnswer,
                         type: 'book_after_book'
                     };
-                } else if (questionTypeRoll < 0.75) { // Tipo 3: Categoría de Múltiples Libros (25%)
+                } else if (questionTypeRoll < 0.75) { 
                     const category = categories[Math.floor(Math.random() * categories.length)];
                     let booksInCat = booksData.filter(b => b.category === category);
                     shuffleArray(booksInCat);
-                    if (booksInCat.length >= 2) { // Necesitamos al menos 2 libros
-                        const selectedBooks = booksInCat.slice(0, Math.random() < 0.5 && booksInCat.length >=3 ? 3 : 2); // 2 o 3 libros
+                    if (booksInCat.length >= 2) { 
+                        const selectedBooks = booksInCat.slice(0, Math.random() < 0.5 && booksInCat.length >=3 ? 3 : 2); 
                         const bookNames = selectedBooks.map(b => `<strong>${b.name}</strong>`).join(', ');
                         
                         let wrongAnswersPool = categories.filter(cat => cat !== category);
@@ -333,15 +333,14 @@
                             text: `Los libros ${bookNames} pertenecen a la categoría de:`,
                             options: options.slice(0,4),
                             answer: category,
-                            booksInQuestion: selectedBooks.map(b => b.name), // Para info
+                            booksInQuestion: selectedBooks.map(b => b.name), 
                             type: 'category_of_multiple_books'
                         };
-                    } else { i--; continue; } // No suficientes libros en categoría, reintentar
+                    } else { i--; continue; } 
                 
-                } else { // Tipo 4: Selecciona DOS libros en orden DESPUÉS de X (25%)
+                } else { 
                     let bookIndex;
                     let book;
-                     // Asegurar que no sea uno de los dos últimos por orden
                     do { bookIndex = Math.floor(Math.random() * (booksData.length - 2));
                          book = booksData[bookIndex];
                     } while (book.order >= booksData.length - 1);
@@ -349,25 +348,25 @@
                     const correctAnswer1 = booksData.find(b => b.order === book.order + 1)?.name;
                     const correctAnswer2 = booksData.find(b => b.order === book.order + 2)?.name;
 
-                    if (!correctAnswer1 || !correctAnswer2) { i--; continue; } // Fallback
+                    if (!correctAnswer1 || !correctAnswer2) { i--; continue; } 
 
                     let wrongAnswers = [];
                     let tempBooks = shuffleArray([...booksData]);
-                    for(let b of tempBooks) {
-                        if (b.name !== correctAnswer1 && b.name !== correctAnswer2 && b.name !== book.name && wrongAnswers.length < 3) {
-                            wrongAnswers.push(b.name);
+                    for(let b_item of tempBooks) { // Renombrado 'b' a 'b_item'
+                        if (b_item.name !== correctAnswer1 && b_item.name !== correctAnswer2 && b_item.name !== book.name && wrongAnswers.length < 3) {
+                            wrongAnswers.push(b_item.name);
                         }
                     }
-                    const options = shuffleArray([correctAnswer1, correctAnswer2, ...wrongAnswers.slice(0,2)]); // Asegurar 4-5 opciones
+                    const options = shuffleArray([correctAnswer1, correctAnswer2, ...wrongAnswers.slice(0,2)]); 
                      questionData = {
                         text: `Selecciona en orden los DOS libros que vienen DESPUÉS de <strong>${book.name}</strong>. (Haz clic en el primero, luego en el segundo y confirma)`,
-                        options: options.slice(0,5), // Dar 5 opciones para más desafío
+                        options: options.slice(0,5), 
                         answer: [correctAnswer1, correctAnswer2],
                         type: 'select_two_ordered_after_book'
                     };
                 }
                 if(questionData) questions.push(questionData);
-                else { i--; } // Si no se generó pregunta, reintentar
+                else { i--; } 
             }
         }
 
@@ -395,13 +394,10 @@
                 showQuestion(questions[currentQuestionIndex]);
                 currentQuestionNumberEl.textContent = currentQuestionIndex + 1;
                 progressBarEl.style.width = `${((currentQuestionIndex + 1) / TOTAL_QUESTIONS) * 100}%`;
-                feedbackTextEl.innerHTML = ''; // Limpiar feedback
+                feedbackTextEl.innerHTML = ''; 
                 feedbackTextEl.className = 'feedback-text text-center font-semibold mb-6'; 
                 nextButton.classList.add('hidden');
                 confirmMultiButton.classList.add('hidden');
-                 if (questions[currentQuestionIndex].type === 'select_two_ordered_after_book') {
-                    // No mostrar confirm button inicialmente para este tipo, se activa al seleccionar
-                }
             } else {
                 showEndScreen();
             }
@@ -429,12 +425,10 @@
             if (userSelections.length < 2 && !button.classList.contains('selected-for-multi')) {
                 userSelections.push(optionText);
                 button.classList.add('selected-for-multi');
-                button.disabled = true; // Deshabilitar para no volver a seleccionar el mismo
+                button.disabled = true; 
             }
             
             if (userSelections.length === 2) {
-                // Habilitar todos los botones de opción para posible cambio antes de confirmar
-                // O simplemente mostrar el botón de confirmar
                 confirmMultiButton.classList.remove('hidden');
                  optionsContainerEl.querySelectorAll('.option-button').forEach(btn => {
                     if (!btn.classList.contains('selected-for-multi')) btn.disabled = true;
@@ -455,36 +449,39 @@
                 } else {
                     feedbackHtml = `<span class="text-red-600">Incorrecto.</span> El orden correcto era: <strong>${question.answer[0]}</strong>, luego <strong>${question.answer[1]}</strong>.`;
                 }
+                // Mostrar info de los dos libros correctos
                 feedbackHtml += getBookInfo(question.answer[0]);
                 feedbackHtml += getBookInfo(question.answer[1]);
                 feedbackTextEl.innerHTML = feedbackHtml;
 
-                // Marcar visualmente las opciones
                 optionsContainerEl.querySelectorAll('.option-button').forEach(btn => {
                     btn.disabled = true;
-                    if (question.answer.includes(btn.textContent)) { // Si es parte de la respuesta correcta
-                        if (userSelections.includes(btn.textContent) && userSelections.indexOf(btn.textContent) === question.answer.indexOf(btn.textContent) ) {
-                             // Si el usuario lo seleccionó y en la posición correcta
-                            if (btn.textContent === question.answer[0] || btn.textContent === question.answer[1]) btn.classList.add('correct');
-                        } else if (userSelections.includes(btn.textContent)) {
-                            // Si el usuario lo seleccionó pero en la posición incorrecta o no era parte
-                            btn.classList.add('incorrect');
-                        } else if (btn.textContent === question.answer[0] || btn.textContent === question.answer[1]) {
-                            // No lo seleccionó el usuario pero era correcto (para destacar)
-                             btn.classList.add('correct'); // Podría ser un estilo diferente para "respuesta correcta no elegida"
+                    // Marcar selecciones del usuario y respuestas correctas
+                    const isUserSelection = userSelections.includes(btn.textContent);
+                    const isCorrectAnswerPart = question.answer.includes(btn.textContent);
+
+                    if (isCorrectAnswerPart) {
+                        // Si es parte de la respuesta correcta Y el usuario lo seleccionó en la posición correcta
+                        if (isUserSelection && userSelections.indexOf(btn.textContent) === question.answer.indexOf(btn.textContent)) {
+                            btn.classList.add('correct');
+                        } 
+                        // Si es parte de la respuesta correcta pero el usuario NO lo seleccionó o lo hizo en orden incorrecto
+                        else if (!isUserSelection || (isUserSelection && userSelections.indexOf(btn.textContent) !== question.answer.indexOf(btn.textContent))) {
+                             // Podríamos tener un estilo para "respuesta correcta no seleccionada" o "mal ordenada"
+                             // Por ahora, si era parte de la respuesta correcta, lo marcamos como correcto para que el usuario lo vea.
+                            btn.classList.add('correct'); 
+                            if(isUserSelection) btn.classList.add('incorrect'); // Si lo seleccionó pero mal, también incorrecto
                         }
-                    } else if (userSelections.includes(btn.textContent)) { // Seleccionado por el usuario pero incorrecto
+                    } else if (isUserSelection) { // Si el usuario lo seleccionó pero NO es parte de la respuesta correcta
                         btn.classList.add('incorrect');
                     }
                 });
-
 
                 currentQuestionIndex++;
                 nextButton.classList.remove('hidden');
                 confirmMultiButton.classList.add('hidden');
             }
         }
-
 
         function selectAnswer(button, selectedOption, question) {
             const buttons = optionsContainerEl.querySelectorAll('.option-button');
@@ -504,11 +501,10 @@
                 feedbackHtml = `<span class="text-red-600">Incorrecto.</span> La respuesta era: <strong>${correctAnswer}</strong>.`;
             }
 
-            // Mostrar información adicional
             if (question.type === 'category_of_book') {
                 feedbackHtml += getBookInfo(question.correctBookName);
             } else if (question.type === 'book_after_book') {
-                feedbackHtml += getBookInfo(correctAnswer); // Info del libro que era la respuesta
+                feedbackHtml += getBookInfo(correctAnswer); 
             } else if (question.type === 'category_of_multiple_books') {
                 feedbackHtml += getCategoryInfo(correctAnswer);
                 question.booksInQuestion.forEach(bookName => feedbackHtml += getBookInfo(bookName));
@@ -526,10 +522,10 @@
 
             let message = "";
             const percentage = (score / TOTAL_QUESTIONS) * 100;
-            if (percentage === 100) message = "¡Excelente! ¡Conoces muy bien los libros de la Biblia!";
-            else if (percentage >= 70) message = "¡Muy bien! Sigue practicando para perfeccionar tus conocimientos.";
-            else if (percentage >= 50) message = "¡Buen intento! Un poco más de práctica y lo dominarás.";
-            else message = "Sigue estudiando, ¡seguro mejorarás mucho!";
+            if (percentage === 100) message = "¡Excelente! ¡Conoces muy bien los libros de la Biblia y su mensaje sobre Cristo!";
+            else if (percentage >= 70) message = "¡Muy bien! Sigue profundizando en cómo toda la Escritura apunta a Cristo.";
+            else if (percentage >= 50) message = "¡Buen intento! Repasar la conexión de cada libro con Jesús te ayudará mucho.";
+            else message = "Sigue estudiando, ¡descubrir a Cristo en toda la Biblia es un viaje fascinante!";
             finalMessageEl.textContent = message;
         }
     </script>
